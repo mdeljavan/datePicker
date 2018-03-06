@@ -8,135 +8,153 @@ class App extends Component {
       month: 2,
       day: null
     },
+    months: [
+      {
+        name: 'فروردین',
+        index: 1
+
+      },
+      {
+        name: 'اردیبهشت',
+        index: 2
+
+      },
+      {
+        name: 'خرداد',
+        index: 3
+
+      },
+      {
+        name: 'تیر',
+        index: 4
+
+      },
+      {
+        name: 'مرداد',
+        index: 5
+
+      },
+      {
+        name: 'شهریور',
+        index: 6
+
+      },
+      {
+        name: 'مهر',
+        index: 7
+
+      },
+      {
+        name: 'آبان',
+        index: 8
+
+      },
+      {
+        name: 'آذر',
+        index: 9
+
+      },
+      {
+        name: 'دی',
+        index: 10
+
+      },
+      {
+        name: 'بهمن',
+        index: 11
+
+      },
+      {
+        name: 'اسفند',
+        index: 12
+
+      }
+    ],
     preClicked: false
   }
-  months = [
-    {
-      name: 'فروردین',
-      index: 1
 
-    },
-    {
-      name: 'اردیبهشت',
-      index: 2
-
-    },
-    {
-      name: 'خرداد',
-      index: 3
-
-    },
-    {
-      name: 'تیر',
-      index: 4
-
-    },
-    {
-      name: 'مرداد',
-      index: 5
-
-    },
-    {
-      name: 'شهریور',
-      index: 6
-
-    },
-    {
-      name: 'مهر',
-      index: 7
-
-    },
-    {
-      name: 'آبان',
-      index: 8
-
-    },
-    {
-      name: 'آذر',
-      index: 9
-
-    },
-    {
-      name: 'دی',
-      index: 10
-
-    },
-    {
-      name: 'بهمن',
-      index: 11
-
-    },
-    {
-      name: 'اسفند',
-      index: 12
-
-    }
-  ];
   MaxAndMins = {
     month: {
       max: 12,
       min: 1
     }
   }
-  checkIndexDateElement = ( index, type ) => {
-    const { min, max } = this.MaxAndMins[ type ];
-    if ( index < min ) {
-      const last = this.months[ this.months.length - 1 ];
-      this.months.splice( this.months.length - 1, 1 );
-      this.months.splice( 0, 0, last );
-      return this.months[1].index;
+  checkIndexDateElement = (index, type) => {
+    const { min, max } = this.MaxAndMins[type];
+    if (index === min) {
+      return min;
     }
-    if ( index > max ) return max;
+    if (index > max) return max;
     return index;
   }
-  onChangeDate = ( typeChange, elementChange ) => {
-
+  onChangeDate = (typeChange, elementChange) => {
     const date = {
       ...this.state.date,
     };
-    let current = this.state.date[ elementChange ];
-    if ( typeChange === 'inc' ) {
+    const months = [
+      ...this.state.months
+    ];
+    months.forEach((month, i) => {
+      months[i] = {
+        ...month
+      };
+    });
+    let current = this.state.date[elementChange];
+    if (typeChange === 'inc') {
       current++;
-    } else if ( typeChange === 'dec' ) {
+    } else if (typeChange === 'dec') {
       current--;
     };
-    date[ elementChange ] = this.checkIndexDateElement( current, elementChange );
-    this.setState( {
-      date
-    } );
+
+    let index = this.checkIndexDateElement(current, elementChange);;
+    date[elementChange] = index;
+    console.log(index)
+    if (index === 1) {
+      const last = months[months.length - 1];
+      months.splice(months.length - 1, 1);
+      months.splice(0, 0, last);
+      date[elementChange] = index + 1;
+    }
+    console.log(date[elementChange])
+    this.setState({
+      date,
+      months
+    });
   };
-  render () {
+  render() {
     const { month } = this.state.date;
-    const monthsList = this.months.map( m => {
-      if ( m.index < month ) {
+    // console.log(this.state.months)
+    const monthsList = this.state.months.map(m => {
+
+      if (m.index < month) {
         return <li
           className="pick-bfr"
-          key={ m.index }>
-          { m.name }</li>
-      } else if ( m.index > month ) {
+          key={m.index}>
+          {m.name}</li>
+      } else if (m.index > month) {
         return <li
           className="pick-afr"
-          key={ m.index }>
-          { m.name }</li>
+          key={m.index}>
+          {m.name}</li>
       } else {
         return <li
           className="pick-sl"
-          key={ m.index }>
-          { m.name }</li>
+          key={m.index}>
+          {m.name}</li>
       }
-    } )
+    })
 
     return (
       <div className="App">
         <div className="picker">
           <ul className="pick-m">
-            { monthsList }
+            {monthsList}
             <div className="pick-arw pick-arw-l next"
-              onClick={ () => this.onChangeDate( 'dec', 'month' ) }
-            >{ ">" }</div>
+              onClick={() => this.onChangeDate('dec', 'month')}
+            >{">"}</div>
             <div
               className="pick-arw pick-arw-r prev"
-              onClick={ () => this.onChangeDate( 'inc', 'month' ) } >{ "<" }</div>
+              onClick={() => this.onChangeDate('inc', 'month')} >{"<"}</div>
           </ul>
         </div>
       </div>
