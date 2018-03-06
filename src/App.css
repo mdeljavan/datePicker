@@ -1,0 +1,87 @@
+*{
+  box-sizing: border-box;
+  direction: rtl;
+}
+.App {
+  width:500px;
+  height: 500px;
+  background-color: aquamarine;
+  margin : auto;
+}
+ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  
+  
+}
+.pick-m{
+  position: relative;
+  top:100px;
+  
+  background-color: brown;
+  color: black;
+  font-size: 32px;
+  height: 60px;
+  line-height: 60px;
+  cursor: pointer;
+   /* overflow: hidden;  */
+ 
+}
+
+.pick-m li {
+  position: absolute;
+  top:0;
+  width: 100%;
+  left: 0;
+  height: 100%;
+  text-align: center;
+  display: block;
+  opacity: .3;
+  transition: all .5s;
+  user-select: none;
+}
+li.pick-sl {
+  transform: translateY(0);
+  opacity: 1;
+  z-index: 1;
+}
+li.pick-bfr {
+  transform: translateY(-100%);
+  opacity: .3;
+}
+li.pick-afr {
+  transform: translateY(100%);
+  opacity: .3;
+}
+.pick-arw {
+  position: absolute;
+  width: 25%;
+  top: 0;
+  display: block;
+  text-align: center;
+  margin:0 20px;
+  opacity: 0;
+  transition: all .5s;
+  height: 100%;
+  cursor: pointer;
+  z-index: 10;
+  user-select: none;
+}
+.pick-arw-l {
+  left: 0;
+}
+.pick-arw-r {
+  right: 0;
+}
+
+.pick-m:hover .pick-arw{
+  opacity: 0.4;
+}
+
+.pick-m .pick-arw-r:hover{
+  opacity: 1;
+}
+.pick-m .pick-arw-l:hover{
+  opacity: 1;
+}
