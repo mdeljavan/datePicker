@@ -70,7 +70,7 @@ class App extends Component {
 
       }
     ],
-    preClicked: false
+    bfrClicked: false
   }
 
   MaxAndMins = {
@@ -79,90 +79,98 @@ class App extends Component {
       min: 1
     }
   }
-  checkIndexDateElement = (index, type) => {
-    const { min, max } = this.MaxAndMins[type];
-    if (index === min) {
-      return min;
+  checkIndexDateElement = ( index, type ) => {
+    const { min, max } = this.MaxAndMins[ type ];
+    if ( index < min ) {
+      return max;
     }
-    if (index > max) return max;
+    if ( index > max ) return max;
     return index;
   }
-  onChangeDate = (typeChange, elementChange) => {
+  onChangeDate = ( typeChange, elementChange ) => {
     const date = {
       ...this.state.date,
     };
     const months = [
       ...this.state.months
     ];
-    months.forEach((month, i) => {
-      months[i] = {
+    months.forEach( ( month, i ) => {
+      months[ i ] = {
         ...month
       };
-    });
-    let current = this.state.date[elementChange];
-    if (typeChange === 'inc') {
+    } );
+    let current = this.state.date[ elementChange ];
+    if ( typeChange === 'inc' ) {
       current++;
-    } else if (typeChange === 'dec') {
+    } else if ( typeChange === 'dec' ) {
       current--;
     };
 
-    let index = this.checkIndexDateElement(current, elementChange);;
-    date[elementChange] = index;
-    console.log(index)
-    if (index === 1) {
-      const last = months[months.length - 1];
-      months.splice(months.length - 1, 1);
-      months.splice(0, 0, last);
-      date[elementChange] = index + 1;
-    }
-    console.log(date[elementChange])
-    this.setState({
-      date,
-      months
-    });
-  };
-  render() {
-    const { month } = this.state.date;
-    // console.log(this.state.months)
-    const monthsList = this.state.months.map(m => {
+    let index = this.checkIndexDateElement( current, elementChange );
+    date[ elementChange ] = index;
+    // const mapIndexMonthToIndexArray = months.map( (month,i) => {
+    //   return month.index === index ? i: null;
 
-      if (m.index < month) {
-        return <li
-          className="pick-bfr"
-          key={m.index}>
-          {m.name}</li>
-      } else if (m.index > month) {
-        return <li
-          className="pick-afr"
-          key={m.index}>
-          {m.name}</li>
-      } else {
+    // } );
+
+
+    if ( months[ 0 ].index === index ) {
+      const last = months[ months.length - 1 ];
+      months.splice( months.length - 1, 1 );
+      months.splice( 0, 0, last );
+      // console.log( months );
+    }
+    this.setState( {
+      date,
+      months,
+      bfrClicked: typeChange === 'dec'
+    } );
+  };
+  render () {
+    const { month } = this.state.date;
+    let isBefore = true;
+    const monthsList = this.state.months.map( ( m, index ) => {
+      if ( m.index === month ) {
+        isBefore = false;
         return <li
           className="pick-sl"
-          key={m.index}>
-          {m.name}</li>
+          key={ m.index }
+          value={m.index }>
+          { m.name }</li>;
+      } else {
+        return <li
+          className={ isBefore ? "pick-bfr" : "pick-afr" }
+          key={ m.index }
+          value={m.index }>
+          { m.name }</li>;
       }
-    })
 
-    return (
-      <div className="App">
-        <div className="picker">
-          <ul className="pick-m">
-            {monthsList}
-            <div className="pick-arw pick-arw-l next"
-              onClick={() => this.onChangeDate('dec', 'month')}
-            >{">"}</div>
-            <div
-              className="pick-arw pick-arw-r prev"
-              onClick={() => this.onChangeDate('inc', 'month')} >{"<"}</div>
-          </ul>
+    } )
+    if ( this.state.bfrClicked ) {
+      monthsList[ monthsList.length - 1 ] = <li
+        className={ "pick-afr mda" }
+        key={ Math.random() } value={ this.state.months[ this.state.months.length - 1 ].index }>
+        { this.state.months[ this.state.months.length - 1 ].name }</li>;
+    }
+      return (
+        <div className="App">
+          <div className="picker">
+            <ul className="pick-m">
+              { monthsList }
+              <div className="pick-arw pick-arw-l next"
+                onClick={ () => this.onChangeDate( 'dec', 'month' ) }
+              >{ ">" }</div>
+              <div
+                className="pick-arw pick-arw-r prev"
+                onClick={ () => this.onChangeDate( 'inc', 'month' ) } >{ "<" }</div>
+            </ul>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
-}
 
-export default App;
+  export default App;
 // import React, { Component } from 'react';
 // import './App.css';
 
