@@ -5,7 +5,7 @@ class App extends Component {
   state = {
     date: {
       year: null,
-      month: 2,
+      month: 1,
       day: null
     },
     month: [
@@ -87,6 +87,17 @@ class App extends Component {
     return index;
   }
   onChangeDate = ( typeChange, elementChange ) => {
+    
+    
+    let current = this.state.date[ elementChange ];
+    if ( typeChange === 'inc' ) {
+      current++;
+    } else if ( typeChange === 'dec' ) {
+      current--;
+    };
+    this.applyChangeDate( current, elementChange );
+  };
+  applyChangeDate = (changedIndex,elementChange) => {
     const date = {
       ...this.state.date,
     };
@@ -98,14 +109,7 @@ class App extends Component {
         ...month
       };
     } );
-    let current = this.state.date[ elementChange ];
-    if ( typeChange === 'inc' ) {
-      current++;
-    } else if ( typeChange === 'dec' ) {
-      current--;
-    };
-
-    let index = this.checkIndexDateElement( current, elementChange );
+    let index = this.checkIndexDateElement( changedIndex, elementChange );
     date[ elementChange ] = index;
     if ( arrayDateElement[ 0 ].index === index ) {
       const last = arrayDateElement[ arrayDateElement.length - 1 ];
@@ -121,7 +125,7 @@ class App extends Component {
       [elementChange]:arrayDateElement
     }
     );
-  };
+  }
   mapArrayToElements = ( arr, current ) => {
     let isBefore = true;
     let indexCurrent = null;
@@ -149,6 +153,9 @@ class App extends Component {
         { arr[ arr.length - 1 ].name }</li>;
     }
     return monthsList;
+  }
+  componentDidMount () {
+    this.applyChangeDate( this.state.date.month, 'month' );
   }
   render () {
     const { month } = this.state.date;
