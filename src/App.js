@@ -8,7 +8,7 @@ class App extends Component {
       month: 2,
       day: null
     },
-    months: [
+    month: [
       {
         name: 'فروردین',
         index: 1
@@ -69,8 +69,7 @@ class App extends Component {
         index: 12
 
       }
-    ],
-    bfrClicked: false
+    ]
   }
 
   MaxAndMins = {
@@ -91,11 +90,11 @@ class App extends Component {
     const date = {
       ...this.state.date,
     };
-    const months = [
-      ...this.state.months
+    const arrayDateElement = [
+      ...this.state[ elementChange ]
     ];
-    months.forEach( ( month, i ) => {
-      months[ i ] = {
+    arrayDateElement.forEach( ( month, i ) => {
+      arrayDateElement[ i ] = {
         ...month
       };
     } );
@@ -108,21 +107,20 @@ class App extends Component {
 
     let index = this.checkIndexDateElement( current, elementChange );
     date[ elementChange ] = index;
-    if ( months[ 0 ].index === index ) {
-      const last = months[ months.length - 1 ];
-      months.splice( months.length - 1, 1 );
-      months.splice( 0, 0, last );
-      console.log( months );
-    } else if ( months[ months.length - 1 ].index === index ) {
-      const first = months[ 0 ];
-      months.splice( 0, 1 );
-      months.splice( months.length , 0, first );
+    if ( arrayDateElement[ 0 ].index === index ) {
+      const last = arrayDateElement[ arrayDateElement.length - 1 ];
+      arrayDateElement.splice( arrayDateElement.length - 1, 1 );
+      arrayDateElement.splice( 0, 0, last );
+    } else if ( arrayDateElement[ arrayDateElement.length - 1 ].index === index ) {
+      const first = arrayDateElement[ 0 ];
+      arrayDateElement.splice( 0, 1 );
+      arrayDateElement.splice( arrayDateElement.length, 0, first );
     }
     this.setState( {
       date,
-      months,
-      bfrClicked: typeChange === 'dec'
-    } );
+      [elementChange]:arrayDateElement
+    }
+    );
   };
   mapArrayToElements = ( arr, current ) => {
     let isBefore = true;
@@ -147,23 +145,14 @@ class App extends Component {
     if ( indexCurrent === 1 ) {
       monthsList[ monthsList.length - 1 ] = <li
         className={ "pick-afr" }
-        key={ Math.random() } value={ this.state.months[ this.state.months.length - 1 ].index }>
-        { this.state.months[ this.state.months.length - 1 ].name }</li>;
+        key={ Math.random() } value={ arr[ arr.length - 1 ].index }>
+        { arr[ arr.length - 1 ].name }</li>;
     }
     return monthsList;
-    // if ( this.state.bfrClicked ) {
-    //   monthsList[ monthsList.length - 1 ] = <li
-    //     className={ "pick-afr mda" }
-    //     key={ Math.random() } value={ this.state.months[ this.state.months.length - 1 ].index }>
-    //     { this.state.months[ this.state.months.length - 1 ].name }</li>;
-    // }
-  }
-  componentDidMount () {
-
   }
   render () {
     const { month } = this.state.date;
-    const monthsList = this.mapArrayToElements( this.state.months, month );
+    const monthsList = this.mapArrayToElements( this.state.month, month );
     return (
       <div className="App">
         <div className="picker">
