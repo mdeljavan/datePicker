@@ -84,7 +84,7 @@ class App extends Component {
     if ( index < min ) {
       return max;
     }
-    if ( index > max ) return max;
+    if ( index > max ) return min;
     return index;
   }
   onChangeDate = ( typeChange, elementChange ) => {
@@ -108,17 +108,15 @@ class App extends Component {
 
     let index = this.checkIndexDateElement( current, elementChange );
     date[ elementChange ] = index;
-    // const mapIndexMonthToIndexArray = months.map( (month,i) => {
-    //   return month.index === index ? i: null;
-
-    // } );
-
-
     if ( months[ 0 ].index === index ) {
       const last = months[ months.length - 1 ];
       months.splice( months.length - 1, 1 );
       months.splice( 0, 0, last );
-      // console.log( months );
+      console.log( months );
+    } else if ( months[ months.length - 1 ].index === index ) {
+      const first = months[ 0 ];
+      months.splice( 0, 1 );
+      months.splice( months.length , 0, first );
     }
     this.setState( {
       date,
@@ -126,51 +124,65 @@ class App extends Component {
       bfrClicked: typeChange === 'dec'
     } );
   };
-  render () {
-    const { month } = this.state.date;
+  mapArrayToElements = ( arr, current ) => {
     let isBefore = true;
-    const monthsList = this.state.months.map( ( m, index ) => {
-      if ( m.index === month ) {
+    let indexCurrent = null;
+    const monthsList = arr.map( ( el, index ) => {
+      if ( el.index === current ) {
+        indexCurrent = index;
         isBefore = false;
         return <li
           className="pick-sl"
-          key={ m.index }
-          value={m.index }>
-          { m.name }</li>;
+          key={ el.index }
+          value={ el.index }>
+          { el.name }</li>;
       } else {
         return <li
           className={ isBefore ? "pick-bfr" : "pick-afr" }
-          key={ m.index }
-          value={m.index }>
-          { m.name }</li>;
+          key={ el.index }
+          value={ el.index }>
+          { el.name }</li>;
       }
-
     } )
-    if ( this.state.bfrClicked ) {
+    if ( indexCurrent === 1 ) {
       monthsList[ monthsList.length - 1 ] = <li
-        className={ "pick-afr mda" }
+        className={ "pick-afr" }
         key={ Math.random() } value={ this.state.months[ this.state.months.length - 1 ].index }>
         { this.state.months[ this.state.months.length - 1 ].name }</li>;
     }
-      return (
-        <div className="App">
-          <div className="picker">
-            <ul className="pick-m">
-              { monthsList }
-              <div className="pick-arw pick-arw-l next"
-                onClick={ () => this.onChangeDate( 'dec', 'month' ) }
-              >{ ">" }</div>
-              <div
-                className="pick-arw pick-arw-r prev"
-                onClick={ () => this.onChangeDate( 'inc', 'month' ) } >{ "<" }</div>
-            </ul>
-          </div>
-        </div>
-      );
-    }
+    return monthsList;
+    // if ( this.state.bfrClicked ) {
+    //   monthsList[ monthsList.length - 1 ] = <li
+    //     className={ "pick-afr mda" }
+    //     key={ Math.random() } value={ this.state.months[ this.state.months.length - 1 ].index }>
+    //     { this.state.months[ this.state.months.length - 1 ].name }</li>;
+    // }
   }
+  componentDidMount () {
 
-  export default App;
+  }
+  render () {
+    const { month } = this.state.date;
+    const monthsList = this.mapArrayToElements( this.state.months, month );
+    return (
+      <div className="App">
+        <div className="picker">
+          <ul className="pick-m">
+            { monthsList }
+            <div className="pick-arw pick-arw-l next"
+              onClick={ () => this.onChangeDate( 'dec', 'month' ) }
+            >{ ">" }</div>
+            <div
+              className="pick-arw pick-arw-r prev"
+              onClick={ () => this.onChangeDate( 'inc', 'month' ) } >{ "<" }</div>
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default App;
 // import React, { Component } from 'react';
 // import './App.css';
 
