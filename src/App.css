@@ -15,7 +15,7 @@ ul{
   
   
 }
-.pick-m{
+.pick{
   position: relative;
   top:100px;
   
@@ -29,7 +29,7 @@ ul{
  
 }
 
-.pick-m li {
+.pick li {
   position: absolute;
   top:0;
   width: 100%;
@@ -75,13 +75,13 @@ li.pick-afr {
   right: 0;
 }
 
-.pick-m:hover .pick-arw{
+.pick:hover .pick-arw{
   opacity: 0.4;
 }
 
-.pick-m .pick-arw-r:hover{
+.pick .pick-arw-r:hover{
   opacity: 1;
 }
-.pick-m .pick-arw-l:hover{
+.pick .pick-arw-l:hover{
   opacity: 1;
 }

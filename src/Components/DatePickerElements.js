@@ -77,15 +77,17 @@ class DatePickerElements extends Component {
     };
     this.state = {
       ElementValues,
-      MaxAndMins:{
+      MaxAndMins: {
         min: 1,
         max: ElementValues.length
       },
-      currentValue:props.current - props.min +1
-    }  
+      currentValue: props.current - props.min + 1,
+      doubleClickd: false
+    }
   };
   checkIndexDateElement = ( index ) => {
     const { min, max } = this.state.MaxAndMins;
+
     if ( index < min ) {
       return max;
     }
@@ -94,14 +96,9 @@ class DatePickerElements extends Component {
     };
     return index;
   }
-  onChangeDate = ( typeChange ) => {
+  onChangeDate = ( howManuChange ) => {
     let current = this.state.currentValue;
-    let changedIndex;
-    if ( typeChange === 'inc' ) {
-      changedIndex = current + 1;
-    } else if ( typeChange === 'dec' ) {
-      changedIndex = current - 1;
-    };
+    let changedIndex = current - howManuChange;
     this.applyChangeDate( changedIndex );
   };
   applyChangeDate = ( changedIndex ) => {
@@ -114,6 +111,8 @@ class DatePickerElements extends Component {
       };
     } );
     let index = this.checkIndexDateElement( changedIndex );
+
+
     if ( arrayDateElement[ 0 ].index === index ) {
       const last = arrayDateElement[ arrayDateElement.length - 1 ];
       arrayDateElement.splice( arrayDateElement.length - 1, 1 );
@@ -123,11 +122,20 @@ class DatePickerElements extends Component {
       arrayDateElement.splice( 0, 1 );
       arrayDateElement.splice( arrayDateElement.length, 0, first );
     }
+
+
     this.setState( {
-      currentValue:index,
+      currentValue: index,
       ElementValues: arrayDateElement
     }
     );
+
+  };
+
+  componentDidUpdate () {
+    if ( this.props.current !== this.state.currentValue ) {
+      return this.props.setCurrent( this.state.currentValue, this.props.type );
+    };
   }
   componentDidMount () {
     let currentElementValues = this.state.currentValue;
@@ -161,19 +169,69 @@ class DatePickerElements extends Component {
     }
     return elementLists;
   }
+  currentYear = ( currentIndex ) => {
+    const objYear = this.state.ElementValues.find( year => {
+      return year.index === currentIndex
+    } );
+    return objYear;
+  }
+  onDoubleClickHandler = ( event ) => {
+
+
+    if ( event.target.tagName === 'LI' ) {
+      if ( !this.state.doubleClickd ) {
+        const currentYear = this.currentYear( this.state.currentValue );
+        const lastNum = currentYear.value.toString().slice( -1 );
+        let current;
+        if ( lastNum >= 0 && lastNum <= 5 ) {
+          current = currentYear.value - lastNum;
+        } else {
+          current = currentYear.value + ( -lastNum + 10 );
+        }
+
+        console.log( lastNum )
+        console.log( current )
+        const currentValue = this.state.ElementValues.find( itm => {
+          console.log(itm.value , current,itm.value === current)
+          return itm.value === current
+        } )
+        this.setState( prevState => {
+          return {
+            currentValue: currentValue.index,
+            doubleClickd: !prevState.doubleClickd
+          };
+        } );
+      } else {
+        console.log( 22 )
+        this.setState( prevState => {
+          return {
+            doubleClickd: !prevState.doubleClickd
+          };
+        } );
+      }
+    };
+    return;
+  };
   render () {
     const ElementValues = this.state.ElementValues;
     const currentIndex = this.state.currentValue;
     const elementLists = this.mapArrayToElements( ElementValues, currentIndex );
     return (
-      <ul className="pick-m">
+      <ul
+        className="pick"
+        onDoubleClick={ this.props.type === 'year' ? ( event ) => this.onDoubleClickHandler( event ) : null }>
         { elementLists }
         <div className="pick-arw pick-arw-l next"
-          onClick={ () => this.onChangeDate( 'dec', this.props.type === 'month' ? 'months' : 'years' ) }
-        >{ ">" }</div>
+          onClick={ !this.state.doubleClickd ?
+            () => this.onChangeDate( -1, this.props.type === 'month' ? 'months' : 'years' )
+            : () => this.onChangeDate( -10, this.props.type === 'month' ? 'months' : 'years' ) }
+        >{ this.state.doubleClickd ? '>>' : '>' }</div>
         <div
           className="pick-arw pick-arw-r prev"
-          onClick={ () => this.onChangeDate( 'inc', this.props.type === 'month' ? 'months' : 'years' ) } >{ "<" }</div>
+          onClick={ !this.state.doubleClickd ?
+            () => this.onChangeDate( 1, this.props.type === 'month' ? 'months' : 'years' )
+            : () => this.onChangeDate( 10, this.props.type === 'month' ? 'months' : 'years' ) }
+        >{ this.state.doubleClickd ? '<<' : '<' }</div>
       </ul>
     );
   };

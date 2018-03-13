@@ -71,21 +71,33 @@ class App extends Component {
 
     }
   ];
-
+  onSetCurrentValues = ( current, type ) => {
+    if ( type === 'month' ) {
+      this.setState( {
+        currentMonth: current
+      } )
+    } else if ( type === 'year' ) {
+      this.setState( {
+        currentYear: current
+      } )
+    }
+  }
   render () {
     return (
       <div className="App">
         <div className="picker">
           <DatePickerElements
             type='month'
-            min='1'
-            max='12'
-            current={ this.state.currentMonth } />
+            min={1}
+            max={12}
+            current={ this.state.currentMonth }
+            setCurrent={ this.onSetCurrentValues } />
           <DatePickerElements
             type='year'
-            min='1970'
-            max='2030'
-            current={ this.state.currentYear } />
+            min={1300}
+            max={this.state.currentYear+10}
+            current={ this.state.currentYear }
+            setCurrent={ this.onSetCurrentValues } />
         </div>
       </div>
     );
