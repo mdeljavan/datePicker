@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
 import DatePickerElements from './Components/DatePickerElements';
+import DatePickerDays from './Components/DatePickerDays';
 class App extends Component {
   constructor ( props ) {
     super( props );
     this.state = {
-      currentMonth: new Date().getMonth(),
-      currentYear: new Date().getFullYear()
+      currentMonth: new Date().getMonth()+1,
+      currentYear: new Date().getFullYear(),
+      currentDay : new Date().getDate(),
+      currentDayName : new Date().getDay()
     };
   };
   month = [
@@ -92,6 +95,12 @@ class App extends Component {
             max={12}
             current={ this.state.currentMonth }
             setCurrent={ this.onSetCurrentValues } />
+          <DatePickerDays
+            currentMonth={ this.state.currentMonth }
+            currentYear={ this.state.currentYear }
+            currentDay={ this.state.currentDay }
+            currentDayName={this.state.currentDayName}
+          />
           <DatePickerElements
             type='year'
             min={1300}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { mapArrayToElements } from './../utility'
 class DatePickerElements extends Component {
   constructor ( props ) {
     super( props );
@@ -111,8 +112,6 @@ class DatePickerElements extends Component {
       };
     } );
     let index = this.checkIndexDateElement( changedIndex );
-
-
     if ( arrayDateElement[ 0 ].index === index ) {
       const last = arrayDateElement[ arrayDateElement.length - 1 ];
       arrayDateElement.splice( arrayDateElement.length - 1, 1 );
@@ -122,16 +121,12 @@ class DatePickerElements extends Component {
       arrayDateElement.splice( 0, 1 );
       arrayDateElement.splice( arrayDateElement.length, 0, first );
     }
-
-
     this.setState( {
       currentValue: index,
       ElementValues: arrayDateElement
     }
     );
-
   };
-
   componentDidUpdate () {
     if ( this.props.current !== this.state.currentValue ) {
       return this.props.setCurrent( this.state.currentValue, this.props.type );
@@ -141,34 +136,7 @@ class DatePickerElements extends Component {
     let currentElementValues = this.state.currentValue;
     this.applyChangeDate( currentElementValues );
   };
-  mapArrayToElements = ( arrayElements, current ) => {
-    let isBefore = true;
-    let indexCurrent = null;
-    const elementLists = arrayElements.map( ( el, index ) => {
-      if ( el.index === current ) {
-        indexCurrent = index;
-        isBefore = false;
-        return <li
-          className="pick-sl"
-          key={ el.index }
-          value={ el.index }>
-          { el.value }</li>;
-      } else {
-        return <li
-          className={ isBefore ? "pick-bfr" : "pick-afr" }
-          key={ el.index }
-          value={ el.index }>
-          { el.value }</li>;
-      }
-    } )
-    if ( indexCurrent === 1 ) {
-      elementLists[ elementLists.length - 1 ] = <li
-        className={ "pick-afr" }
-        key={ Math.random() } value={ arrayElements[ arrayElements.length - 1 ].index }>
-        { arrayElements[ arrayElements.length - 1 ].value }</li>;
-    }
-    return elementLists;
-  }
+
   currentYear = ( currentIndex ) => {
     const objYear = this.state.ElementValues.find( year => {
       return year.index === currentIndex
@@ -176,8 +144,6 @@ class DatePickerElements extends Component {
     return objYear;
   }
   onDoubleClickHandler = ( event ) => {
-
-
     if ( event.target.tagName === 'LI' ) {
       if ( !this.state.doubleClickd ) {
         const currentYear = this.currentYear( this.state.currentValue );
@@ -188,11 +154,7 @@ class DatePickerElements extends Component {
         } else {
           current = currentYear.value + ( -lastNum + 10 );
         }
-
-        console.log( lastNum )
-        console.log( current )
         const currentValue = this.state.ElementValues.find( itm => {
-          console.log(itm.value , current,itm.value === current)
           return itm.value === current
         } )
         this.setState( prevState => {
@@ -202,7 +164,6 @@ class DatePickerElements extends Component {
           };
         } );
       } else {
-        console.log( 22 )
         this.setState( prevState => {
           return {
             doubleClickd: !prevState.doubleClickd
@@ -215,7 +176,7 @@ class DatePickerElements extends Component {
   render () {
     const ElementValues = this.state.ElementValues;
     const currentIndex = this.state.currentValue;
-    const elementLists = this.mapArrayToElements( ElementValues, currentIndex );
+    const elementLists = mapArrayToElements( ElementValues, currentIndex );
     return (
       <ul
         className="pick"
