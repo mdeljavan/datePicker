@@ -117,17 +117,18 @@ const datePickerDays = ( props ) => {
     'پنج',
     'ج',
   ];
-  const dayNameOfFirstMonth = () => {
-    return new Date( props.currentYear, props.currentMonth+1, 1 ).getDay();
+  const firstDayNameofMonth = () => {
+    return new Date( props.currentYear, props.currentMonth, 1 ).getDay();
   };
-
-
+  const lastDayNameofMonth = () => {
+    return new Date( props.currentYear, props.currentMonth, daysMonths ).getDay();
+  };
   const isLeap = ( year ) => {
     const r = year % 33;
     return ( r === 1 || r === 5 || r === 9 || r === 13 || r === 17 || r === 22 || r === 26 || r === 30 );
-  }
+  };
   const daysMonths = () => {
-    return [ 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, isLeap( props.currentYear ) ? 30 : 29 ][ props.currentMonth-1];
+    return [ 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, isLeap( props.currentYear ) ? 30 : 29 ][ props.currentMonth - 1 ];
 
   };
   const dayNames = shortNameDay.map( ( dayName, index ) => {
@@ -139,23 +140,28 @@ const datePickerDays = ( props ) => {
     );
   } );
   const dayInMonth = [];
-  for ( let i = dayNameOfFirstMonth(); i >= 0; i-- ) {
-  
+  console.log( firstDayNameofMonth() )
+  for ( let i = firstDayNameofMonth(); i >= 0; i-- ) {
     dayInMonth.push(
       <li
-        // key={ Math.random() }
-      key={ 'lastMonth' + i.toString()}
+        key={ 'lastMonth' + i.toString() }
       ></li>
-    )
-  }
+    );
+  };
   for ( let i = 1; i <= daysMonths(); i++ ) {
     dayInMonth.push(
       <li
-        // key={ Math.random() }
-      key={ 'currentMonth' + i.toString() }
+        key={ 'currentMonth' + i.toString() }
       >{ i }</li>
-    )
-  }
+    );
+  };
+  for ( let i = lastDayNameofMonth(); i <= 6; i++ ) {
+    dayInMonth.push(
+      <li
+        key={ 'NextMonth' + i.toString() }
+      >{ i }</li>
+    );
+  };
   return (
     <div className="d">
       <ul className="pick-day">
@@ -165,6 +171,6 @@ const datePickerDays = ( props ) => {
         { dayInMonth }
       </ul>
     </div>
-  )
-}
+  );
+};
 export default datePickerDays;

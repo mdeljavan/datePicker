@@ -203,17 +203,20 @@ class App extends Component {
         ...this.state.month,
         [ 'values' ]: [
           ...monthArrayValues
-        ]
+        ],
+        ['current']:new Date().getMonth()+1
       },
       [ 'year' ]: {
         ...this.state.year,
         [ 'values' ]: [
           ...yearArrayValues
-        ]
+        ],
+        ['current']:new Date().getFullYear()
       },
 
     }
     this.setState( {
+      
       month: newState.month,
       year: newState.year
     } )

@@ -35,16 +35,6 @@ const DatePickerElements = ( props ) => {
     let index = checkIndexDateElement( changedIndex );
     props.clicked( props.type, index );
   };
-  // componentDidUpdate () {
-  //   if ( this.props.current !== this.state.currentValue ) {
-  //     return this.props.setCurrent( this.state.currentValue, this.props.type );
-  //   };
-  // }
-  // componentDidMount () {
-  //   let currentElementValues = this.state.currentValue;
-  //   this.applyChangeDate( currentElementValues );
-  // };
-
   const currentYear = ( currentIndex ) => {
     const objYear = ElementValues.find( year => {
       return year.index === currentIndex
