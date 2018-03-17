@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import DatePickerElements from './Components/DatePickerElements.1';
 import DatePickerDays from './Components/DatePickerDays';
+import {gregorian_to_jalali, jalali_to_gregorian} from './lib/changeDate';
 class App extends Component {
   constructor ( props ) {
     super( props );
@@ -24,68 +25,6 @@ class App extends Component {
       currentDayName: new Date().getDay(),
     };
   };
-  month = [
-    {
-      name: 'فروردین',
-      index: 1
-
-    },
-    {
-      name: 'اردیبهشت',
-      index: 2
-
-    },
-    {
-      name: 'خرداد',
-      index: 3
-
-    },
-    {
-      name: 'تیر',
-      index: 4
-
-    },
-    {
-      name: 'مرداد',
-      index: 5
-
-    },
-    {
-      name: 'شهریور',
-      index: 6
-
-    },
-    {
-      name: 'مهر',
-      index: 7
-
-    },
-    {
-      name: 'آبان',
-      index: 8
-
-    },
-    {
-      name: 'آذر',
-      index: 9
-
-    },
-    {
-      name: 'دی',
-      index: 10
-
-    },
-    {
-      name: 'بهمن',
-      index: 11
-
-    },
-    {
-      name: 'اسفند',
-      index: 12
-
-    }
-  ];
   onChangeTheDate = ( type, index, ) => {
     const ArrayValues = this.exutableListArray( this.state[ type ].values, index );
     const valueChanged = type === 'month' ? 'currentMonth' : 'currentYear';
