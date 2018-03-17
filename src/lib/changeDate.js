@@ -6,7 +6,7 @@ License: GNU/LGPL _ Open Source & Free _ Version: 2.72 : [2017=1396]
 12053 = 365*33 + 32/4    &    36524 = 365*100 + 100/4 - 100/100   */
 
 
-export const gregorian_to_jalali =(gy, gm, gd) => {
+const gregorian_to_jalali = (gy, gm, gd) => {
     const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
     let jy;
     if (gy > 1600) {
@@ -16,23 +16,27 @@ export const gregorian_to_jalali =(gy, gm, gd) => {
         jy = 0;
         gy -= 621;
     }
-    const gy2 = ((gm > 2) ? (gy + 1) : gy);
-    let days = (365 * gy) + (parseInt((gy2 + 3) / 4)) - (parseInt((gy2 + 99) / 100)) + (parseInt((gy2 + 399) / 400)) - 80 + gd + g_d_m[gm - 1];
+    gd = +gd;
+    gy = +gy;
+    gm = +gm;
+    const gy2 = +(((gm > 2) ? (gy + 1) : gy));
+    let days = (365 * gy) + ((gy2 + 3) / 4) - ((gy2 + 99) / 100) + ((gy2 + 399) / 400) - 80 + gd + g_d_m[gm - 1];
     jy += 33 * (parseInt(days / 12053));
     days %= 12053;
     jy += 4 * (parseInt(days / 1461));
     days %= 1461;
     if (days > 365) {
-        jy += parseInt((days - 1) / 365);
+        jy += (days - 1) / 365;
         days = (days - 1) % 365;
     }
-    const jm = (days < 186) ? 1 + parseInt(days / 31) : 7 + parseInt((days - 186) / 30);
+    const jm = (days < 186) ? 1 + days / 31 : 7 + (days - 186) / 30;
     const jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
-    return [jy, jm, jd];
+    return [Math.floor(jy), Math.floor(jm), Math.floor(jd)];
 }
 
+console.log(gregorian_to_jalali(2018, 3, 17))
 
-export const jalali_to_gregorian =(jy, jm, jd)  =>{
+const jalali_to_gregorian = (jy, jm, jd) => {
     let gy;
     if (jy > 979) {
         gy = 1600;
@@ -40,7 +44,10 @@ export const jalali_to_gregorian =(jy, jm, jd)  =>{
     } else {
         gy = 621;
     }
-    let days = (365 * jy) + ((parseInt(jy / 33)) * 8) + (parseInt(((jy % 33) + 3) / 4)) + 78 + jd + ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+    jy = +jy;
+    jm = +jm;
+    jd = +jd;
+    let days = (365 * jy) + ((jy / 33) * 8) + (((jy % 33) + 3) / 4) + 78 + jd + ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
     gy += 400 * (parseInt(days / 146097));
     days %= 146097;
     if (days > 36524) {
@@ -61,5 +68,5 @@ export const jalali_to_gregorian =(jy, jm, jd)  =>{
         if (gd <= v) break;
         gd -= v;
     }
-    return [gy, gm, gd];
+    return [Math.floor(gy), Math.floor(gm), Math.floor(gd)];
 }
