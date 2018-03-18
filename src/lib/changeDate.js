@@ -6,7 +6,7 @@ License: GNU/LGPL _ Open Source & Free _ Version: 2.72 : [2017=1396]
 12053 = 365*33 + 32/4    &    36524 = 365*100 + 100/4 - 100/100   */
 
 
-const gregorian_to_jalali = ( gy, gm, gd ) => {
+export const gregorian_to_jalali = ( gy, gm, gd ) => {
     const g_d_m = [ 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 ];
     let jy;
     if ( gy > 1600 ) {
@@ -33,10 +33,7 @@ const gregorian_to_jalali = ( gy, gm, gd ) => {
     const jd = 1 + ( ( days < 186 ) ? ( days % 31 ) : ( ( days - 186 ) % 30 ) );
     return [ jy, jm, jd ];
 }
-
-console.log( gregorian_to_jalali( 2018, 3, 18 ) )
-
-const jalali_to_gregorian = ( jy, jm, jd ) => {
+export const jalali_to_gregorian = ( jy, jm, jd ) => {
     let gy;
     if ( jy > 979 ) {
         gy = 1600;
@@ -62,7 +59,7 @@ const jalali_to_gregorian = ( jy, jm, jd ) => {
         days = ( days - 1 ) % 365;
     }
     let gd = days + 1;
-    const sal_a = [ 0, 31, ( ( gy % 4 == 0 && gy % 100 != 0 ) || ( gy % 400 == 0 ) ) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+    const sal_a = [ 0, 31, ( ( gy % 4 === 0 && gy % 100 !== 0 ) || ( gy % 400 === 0 ) ) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
     for ( var gm = 0; gm < 13; gm++ ) {
         const v = sal_a[ gm ];
         if ( gd <= v ) break;

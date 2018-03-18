@@ -2,69 +2,76 @@ import React, { Component } from 'react';
 import './App.css';
 import DatePickerElements from './Components/DatePickerElements.1';
 import DatePickerDays from './Components/DatePickerDays';
-import {gregorian_to_jalali, jalali_to_gregorian} from './lib/changeDate';
+import JalaliDate from './lib/JalaliDate';
 class App extends Component {
-  constructor ( props ) {
-    super( props );
+  constructor(props) {
+    super(props);
     this.state = {
       month: {
-        todya: new Date().getMonth() + 1,
+        taday: null,
         current: 1,
         min: 1,
         max: 12,
         values: null
       },
       year: {
-        today: new Date().getFullYear(),
-        current: 1970,
-        min: 1970,
-        max: new Date().getFullYear() + 10,
+        today: null,
+        current: 1300,
+        min: 1350,
+        max: 1396 + 10,
         values: null
       },
       currentDay: new Date().getDate(),
       currentDayName: new Date().getDay(),
     };
   };
-  onChangeTheDate = ( type, index, ) => {
-    const ArrayValues = this.exutableListArray( this.state[ type ].values, index );
-    const valueChanged = type === 'month' ? 'currentMonth' : 'currentYear';
-    const ArrValue = type === 'monthArrayValues' ? 'currentMonth' : 'yearArrayValues';
+  onChangeTheDate = (type, index, ) => {
+    const ArrayValues = this.exutableListArray(this.state[type].values, index);
+    const values = 'values';
+    const current = 'current';
+
     const newStateElement = {
-      ...this.state[ type ],
-      [ 'values' ]: [
+      ...this.state[type],
+      [values]: [
         ...ArrayValues
       ],
-      [ 'current' ]: index
+      [current]: index
     };
-    this.setState( {
-      [ type ]: newStateElement
+    this.setState({
+      [type]: newStateElement
       // ElementValues: arrayDateElement
-    } );
+    });
   }
-  onSetCurrentValues = ( current, type ) => {
-    if ( type === 'month' ) {
-      this.setState( {
+  onSetCurrentValues = (current, type) => {
+    if (type === 'month') {
+      this.setState({
         currentMonth: current
-      } )
-    } else if ( type === 'year' ) {
-      this.setState( {
+      })
+    } else if (type === 'year') {
+      this.setState({
         currentYear: current
-      } )
+      })
     }
   }
-  exutableListArray = ( arr, nextIndex ) => {
-    const arrayDateElement = [ ...arr ];
+  exutableListArray = (arr, nextIndex) => {
+    const arrayDateElement = [...arr];
     const index = nextIndex;
-    if ( arrayDateElement[ 0 ].index === index ) {
-      const last = arrayDateElement.splice( -1, 1 );
-      arrayDateElement.splice( 0, 0, last[0] );
-    } else if ( arrayDateElement[ arrayDateElement.length - 1 ].index === index ) {
-      const first = arrayDateElement.splice( 0, 1 );
-      arrayDateElement.splice( arrayDateElement.length, 0, first[0] );
+    if (arrayDateElement[0].index === index) {
+      const last = arrayDateElement.splice(-1, 1);
+      arrayDateElement.splice(0, 0, last[0]);
+    } else if (arrayDateElement[arrayDateElement.length - 1].index === index) {
+      const first = arrayDateElement.splice(0, 1);
+      arrayDateElement.splice(arrayDateElement.length, 0, first[0]);
     };
     return arrayDateElement;
   }
-  componentDidMount () {
+
+  componentDidMount() {
+    const month = 'month';
+    const year = 'year';
+    const values = 'values';
+    const current = 'current';
+
     const monthName = [
       {
         value: 'فروردین',
@@ -127,71 +134,70 @@ class App extends Component {
 
       }
     ];
-    const monthArrayValues = this.exutableListArray( monthName, this.state.month.current );
+    const monthArrayValues = this.exutableListArray(monthName, this.state.month.current);
     const yearArrayValues = [];
-    for ( let i = this.state.year.min, counter = 1; i <= this.state.year.max; i++ ) {
-      yearArrayValues.push( {
+    for (let i = this.state.year.min, counter = 1; i <= this.state.year.max; i++) {
+      yearArrayValues.push({
         index: counter,
         value: i
-      } );
+      });
       counter++;
     }
     const newState = {
       ...this.state,
-      [ 'month' ]: {
+      [month]: {
         ...this.state.month,
-        [ 'values' ]: [
+        [values]: [
           ...monthArrayValues
         ],
-        ['current']:new Date().getMonth()+1
+        [current]: todayj[1] + 1
       },
-      [ 'year' ]: {
+      [year]: {
         ...this.state.year,
-        [ 'values' ]: [
+        [values]: [
           ...yearArrayValues
         ],
-        ['current']:new Date().getFullYear()
+        [current]: todayj[0]
       },
 
     }
-    this.setState( {
-      
+    this.setState({
       month: newState.month,
       year: newState.year
-    } )
+    })
   }
-  render () {
+  render() {
     let month = null;
     let year = null;
-    if ( this.state.month.values && this.state.year.values ) {
+    if (this.state.month.values && this.state.year.values) {
       month = <DatePickerElements
         type='month'
-        values={ this.state.month.values }
-        min={ this.state.month.min }
-        max={ this.state.month.max }
-        clicked={ this.onChangeTheDate }
-        current={ this.state.month.current }
-   />
+        values={this.state.month.values}
+        min={this.state.month.min}
+        max={this.state.month.max}
+        clicked={this.onChangeTheDate}
+        current={this.state.month.current}
+      />
       year = <DatePickerElements
         type='year'
-        values={ this.state.year.values }
-        min={ this.state.year.min }
-        max={ this.state.year.max }
-        current={ this.state.year.current }
-        clicked={ this.onChangeTheDate }
-         />
+        values={this.state.year.values}
+        min={this.state.year.min}
+        max={this.state.year.max}
+        current={this.state.year.current}
+        clicked={this.onChangeTheDate}
+      />
     };
     return (
       <div className="App">
         <div className="picker">
-          { month }
+          {month}
           <DatePickerDays
-            currentMonth={ this.state.month.current }
-            currentYear={ this.state.year.current }
-            currentDay={ this.state.currentDay }
-            currentDayName={ this.state.currentDayName }
+            currentMonth={this.state.month.current}
+            currentYear={this.state.year.current}
+            currentDay={this.state.currentDay}
+            currentDayName={this.state.currentDayName}
           />
-          { year }
+          {year}
 
         </div>
       </div>

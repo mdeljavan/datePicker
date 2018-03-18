@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { mapArrayToElements } from './../utility'
 const DatePickerElements = ( props ) => {
+  console.log(props)
   const currentValue = props.current - props.min + 1;
   let ElementValues = props.values;
   const MaxAndMins = {

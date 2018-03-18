@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {gregorian_to_jalali, jalali_to_gregorian} from './../lib/changeDate';
 const datePickerDays = ( props ) => {
   const nameOfDays = [
@@ -10,7 +10,7 @@ const datePickerDays = ( props ) => {
     'پنجشنبه',
     'جمعه',
   ];
-  const shortNameDay = [
+  const shortNameOfDay = [
     'ش',
     'یک',
     'دو',
@@ -33,7 +33,7 @@ const datePickerDays = ( props ) => {
     return [ 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, isLeap( props.currentYear ) ? 30 : 29 ][ props.currentMonth - 1 ];
 
   };
-  const dayNames = shortNameDay.map( ( dayName, index ) => {
+  const dayNames = shortNameOfDay.map( ( dayName, index ) => {
     return (
       <li
         className="day-Names"

@@ -1,5 +1,6 @@
 import React from 'react';
 export const mapArrayToElements = ( arrayElements, current ) => {
+  console.log(arrayElements,current)
   let isBefore = true;
   let indexCurrent = null;
   const elementLists = arrayElements.map( ( el, index ) => {
