@@ -56,7 +56,9 @@ class App extends Component {
   exutableListArray = (arr, nextIndex) => {
     const arrayDateElement = [...arr];
     const index = nextIndex;
+    console.log('hi1',index,arr)
     if (arrayDateElement[0].index === index) {
+      console.log('hi')
       const last = arrayDateElement.splice(-1, 1);
       arrayDateElement.splice(0, 0, last[0]);
     } else if (arrayDateElement[arrayDateElement.length - 1].index === index) {
@@ -71,7 +73,7 @@ class App extends Component {
     const year = 'year';
     const values = 'values';
     const current = 'current';
-
+    const currentMonth = new JalaliDate().getMonth();
     const monthName = [
       {
         value: 'فروردین',
@@ -134,7 +136,7 @@ class App extends Component {
 
       }
     ];
-    const monthArrayValues = this.exutableListArray(monthName, this.state.month.current);
+    const monthArrayValues = this.exutableListArray(monthName, currentMonth);
     const yearArrayValues = [];
     for (let i = this.state.year.min, counter = 1; i <= this.state.year.max; i++) {
       yearArrayValues.push({
@@ -150,14 +152,14 @@ class App extends Component {
         [values]: [
           ...monthArrayValues
         ],
-        [current]: todayj[1] + 1
+        [current]: currentMonth
       },
       [year]: {
         ...this.state.year,
         [values]: [
           ...yearArrayValues
         ],
-        [current]: todayj[0]
+        [current]: new JalaliDate().getFullYear()
       },
 
     }

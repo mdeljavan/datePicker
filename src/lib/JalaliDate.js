@@ -1,25 +1,22 @@
 import { gregorian_to_jalali, jalali_to_gregorian } from './changeDate';
 class JalaliDate {
-    todayj;
+    datej;
+    dateg;
     constructor() {
-        const todayg = new Date();
-        todayj = gregorian_to_jalali(todayg.getFullYear(), todayg.getMonth(), todayg.getDate());
-    };
-    constructor(year, month, day) {
-        const todayg = new Date();
-        todayj = gregorian_to_jalali(todayg.getFullYear(), todayg.getMonth(), todayg.getDate());
+        this.dateg = new Date();
+        this.datej = gregorian_to_jalali(this.dateg.getFullYear(), this.dateg.getMonth(), this.dateg.getDate());
     };
     getFullYear = () => {
-        return this.todayj[0];
+        return this.datej[0];
     };
     getMonth() {
-        return this.todayj[1];
+        return this.datej[1];
     }
     getDate() {
-        return this.todayj[2];
+        return this.datej[2];
     }
     getDay() {
-
+        return new Date(this.dateg[0], this.dateg[1], this.dateg[2]).getDay();
     }
 }
 
