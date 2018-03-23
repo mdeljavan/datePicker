@@ -4,68 +4,7 @@ import DatePickerElements from './Components/DatePickerElements.1';
 import DatePickerDays from './Components/DatePickerDays';
 import JalaliDate from './lib/JalaliDate';
 class App extends Component {
-  monthName = [
-    {
-      value: 'فروردین',
-      index: 1
 
-    },
-    {
-      value: 'اردیبهشت',
-      index: 2
-
-    },
-    {
-      value: 'خرداد',
-      index: 3
-
-    },
-    {
-      value: 'تیر',
-      index: 4
-
-    },
-    {
-      value: 'مرداد',
-      index: 5
-
-    },
-    {
-      value: 'شهریور',
-      index: 6
-
-    },
-    {
-      value: 'مهر',
-      index: 7
-
-    },
-    {
-      value: 'آبان',
-      index: 8
-
-    },
-    {
-      value: 'آذر',
-      index: 9
-
-    },
-    {
-      value: 'دی',
-      index: 10
-
-    },
-    {
-      value: 'بهمن',
-      index: 11
-
-    },
-    {
-      value: 'اسفند',
-      index: 12
-
-    }
-  ];
   constructor(props) {
     super(props);
     this.state = {
@@ -78,13 +17,14 @@ class App extends Component {
       },
       year: {
         today: null,
-        current: 1300,
+        current: 1,
         min: 1350,
         max: 1396 + 10,
         values: null
       },
       currentDay: new Date().getDate(),
       currentDayName: new Date().getDay(),
+      doubleClicked: false
     };
   };
   onChangeTheDate = (type, index) => {
@@ -114,6 +54,21 @@ class App extends Component {
     };
     return arrayDateElement;
   }
+  onDoubleClickedOnYear = (currentValue) => {
+    currentValue = this.state.year.values.find(year => {
+      return year.value === currentValue;
+    }).index
+    const newStateYear = {
+      ...this.state['year'],
+      current: currentValue
+    };
+    this.setState(prevState => {
+      return {
+        year: newStateYear,
+        doubleClicked:  !prevState.doubleClicked
+      }
+    });
+  }
   initializeDateElementArray = (firstValue, lastValue) => {
     const valuesArr = [];
     for (let i = firstValue, counter = 1; i <= lastValue; i++) {
@@ -131,7 +86,7 @@ class App extends Component {
     const values = 'values';
     const current = 'current';
     const currentMonth = new JalaliDate().getMonth();
-    const currentYear= new JalaliDate().getFullYear();
+    const currentYear = new JalaliDate().getFullYear();
     const monthName = this.initializeDateElementArray(this.state.month.min, this.state.month.max)
     const yearArrayValues = this.initializeDateElementArray(this.state.year.min, this.state.year.max)
     const monthArrayValues = this.exutableListArray(monthName, currentMonth);
@@ -163,6 +118,7 @@ class App extends Component {
   render() {
     let month = null;
     let year = null;
+    let days = null;
     if (this.state.month.values && this.state.year.values) {
       month = <DatePickerElements
         type='month'
@@ -179,18 +135,21 @@ class App extends Component {
         max={this.state.year.max}
         current={this.state.year.current}
         clicked={this.onChangeTheDate}
+        doubleClicked={(current) => this.onDoubleClickedOnYear(current)}
+        isDoubleClicked = {this.state.doubleClicked}
+      />
+      days = <DatePickerDays
+        currentMonth={this.state.month.current}
+        currentYear={this.state.year.values[this.state.year.current - 1].value}
+        currentDay={this.state.currentDay}
+        currentDayName={this.state.currentDayName}
       />
     };
     return (
       <div className="App">
         <div className="picker">
           {month}
-          <DatePickerDays
-            currentMonth={this.state.month.current}
-            currentYear={this.state.year.current}
-            currentDay={this.state.currentDay}
-            currentDayName={this.state.currentDayName}
-          />
+          {days}
           {year}
         </div>
       </div>

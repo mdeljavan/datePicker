@@ -21,7 +21,8 @@ const datePickerDays = (props) => {
     'ج',
   ];
   const firstDayNameofMonth = () => {
-    return new JalaliDate(props.currentYear, props.currentMonth + 1, 1).getDay();
+    console.log(props)
+    return new JalaliDate(props.currentYear, props.currentMonth+1 , 1).getDay();
   };
   const lastDayNameofMonth = () => {
     return new JalaliDate(props.currentYear, props.currentMonth + 1, daysMonths()).getDay();
@@ -31,10 +32,10 @@ const datePickerDays = (props) => {
     return (r === 1 || r === 5 || r === 9 || r === 13 || r === 17 || r === 22 || r === 26 || r === 30);
   };
   const daysMonths = (month = props.currentMonth - 1) => {
-    if (month <0){
-      month=11;
-    } else if (month>11){
-      month= 0;
+    if (month < 0) {
+      month = 11;
+    } else if (month > 11) {
+      month = 0;
     }
     return [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, isLeap(props.currentYear) ? 30 : 29][month];
 
