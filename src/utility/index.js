@@ -1,10 +1,10 @@
 import React from 'react';
 export const mapArrayToElements = ( arrayElements, current ) => {
-  console.log(arrayElements,current)
+  // console.log(arrayElements,current)
   let isBefore = true;
   let indexCurrent = null;
   const elementLists = arrayElements.map( ( el, index ) => {
-    if ( el.index === current ) {
+    if ( el.index === current.index ) {
       indexCurrent = index;
       isBefore = false;
       return <li

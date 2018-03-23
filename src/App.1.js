@@ -4,6 +4,68 @@ import DatePickerElements from './Components/DatePickerElements.1';
 import DatePickerDays from './Components/DatePickerDays';
 import JalaliDate from './lib/JalaliDate';
 class App extends Component {
+  monthName = [
+    {
+      value: 'فروردین',
+      index: 1
+
+    },
+    {
+      value: 'اردیبهشت',
+      index: 2
+
+    },
+    {
+      value: 'خرداد',
+      index: 3
+
+    },
+    {
+      value: 'تیر',
+      index: 4
+
+    },
+    {
+      value: 'مرداد',
+      index: 5
+
+    },
+    {
+      value: 'شهریور',
+      index: 6
+
+    },
+    {
+      value: 'مهر',
+      index: 7
+
+    },
+    {
+      value: 'آبان',
+      index: 8
+
+    },
+    {
+      value: 'آذر',
+      index: 9
+
+    },
+    {
+      value: 'دی',
+      index: 10
+
+    },
+    {
+      value: 'بهمن',
+      index: 11
+
+    },
+    {
+      value: 'اسفند',
+      index: 12
+
+    }
+  ];
   constructor(props) {
     super(props);
     this.state = {
@@ -25,11 +87,10 @@ class App extends Component {
       currentDayName: new Date().getDay(),
     };
   };
-  onChangeTheDate = (type, index, ) => {
+  onChangeTheDate = (type, index) => {
     const ArrayValues = this.exutableListArray(this.state[type].values, index);
     const values = 'values';
     const current = 'current';
-
     const newStateElement = {
       ...this.state[type],
       [values]: [
@@ -39,26 +100,12 @@ class App extends Component {
     };
     this.setState({
       [type]: newStateElement
-      // ElementValues: arrayDateElement
     });
-  }
-  onSetCurrentValues = (current, type) => {
-    if (type === 'month') {
-      this.setState({
-        currentMonth: current
-      })
-    } else if (type === 'year') {
-      this.setState({
-        currentYear: current
-      })
-    }
   }
   exutableListArray = (arr, nextIndex) => {
     const arrayDateElement = [...arr];
     const index = nextIndex;
-    console.log('hi1',index,arr)
     if (arrayDateElement[0].index === index) {
-      console.log('hi')
       const last = arrayDateElement.splice(-1, 1);
       arrayDateElement.splice(0, 0, last[0]);
     } else if (arrayDateElement[arrayDateElement.length - 1].index === index) {
@@ -67,84 +114,27 @@ class App extends Component {
     };
     return arrayDateElement;
   }
-
+  initializeDateElementArray = (firstValue, lastValue) => {
+    const valuesArr = [];
+    for (let i = firstValue, counter = 1; i <= lastValue; i++) {
+      valuesArr.push({
+        index: counter,
+        value: i
+      });
+      counter++;
+    }
+    return valuesArr;
+  }
   componentDidMount() {
     const month = 'month';
     const year = 'year';
     const values = 'values';
     const current = 'current';
     const currentMonth = new JalaliDate().getMonth();
-    const monthName = [
-      {
-        value: 'فروردین',
-        index: 1
-
-      },
-      {
-        value: 'اردیبهشت',
-        index: 2
-
-      },
-      {
-        value: 'خرداد',
-        index: 3
-
-      },
-      {
-        value: 'تیر',
-        index: 4
-
-      },
-      {
-        value: 'مرداد',
-        index: 5
-
-      },
-      {
-        value: 'شهریور',
-        index: 6
-
-      },
-      {
-        value: 'مهر',
-        index: 7
-
-      },
-      {
-        value: 'آبان',
-        index: 8
-
-      },
-      {
-        value: 'آذر',
-        index: 9
-
-      },
-      {
-        value: 'دی',
-        index: 10
-
-      },
-      {
-        value: 'بهمن',
-        index: 11
-
-      },
-      {
-        value: 'اسفند',
-        index: 12
-
-      }
-    ];
+    const currentYear= new JalaliDate().getFullYear();
+    const monthName = this.initializeDateElementArray(this.state.month.min, this.state.month.max)
+    const yearArrayValues = this.initializeDateElementArray(this.state.year.min, this.state.year.max)
     const monthArrayValues = this.exutableListArray(monthName, currentMonth);
-    const yearArrayValues = [];
-    for (let i = this.state.year.min, counter = 1; i <= this.state.year.max; i++) {
-      yearArrayValues.push({
-        index: counter,
-        value: i
-      });
-      counter++;
-    }
     const newState = {
       ...this.state,
       [month]: {
@@ -159,7 +149,9 @@ class App extends Component {
         [values]: [
           ...yearArrayValues
         ],
-        [current]: new JalaliDate().getFullYear()
+        [current]: yearArrayValues.find(val => {
+          return val.value === currentYear;
+        }).index
       },
 
     }
@@ -200,7 +192,6 @@ class App extends Component {
             currentDayName={this.state.currentDayName}
           />
           {year}
-
         </div>
       </div>
     );

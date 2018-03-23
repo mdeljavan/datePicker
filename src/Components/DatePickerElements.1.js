@@ -2,25 +2,34 @@ import React, { Component } from 'react';
 import { mapArrayToElements } from './../utility'
 const DatePickerElements = ( props ) => {
   console.log(props)
-  const currentValue = props.current - props.min + 1;
+  const currentValue = props.values.find(val => {
+    return val.index === props.current
+  });  
   let ElementValues = props.values;
   const MaxAndMins = {
     min: props.min,
-    max: ElementValues.length
+    max: props.max
   };
   const checkIndexDateElement = ( index ) => {
     const { min, max } = MaxAndMins;
+    
+    const minIndex = props.values.find(val => {
+      return val.value===min;
+    }).index;
+    const maxIndex = props.values.find(val => {
+      return val.value===max;
+    }).index;
 
-    if ( index < min ) {
-      return max;
+    if ( index < minIndex ) {
+      return maxIndex;
     }
-    if ( index > max ) {
-      return min;
+    if ( index > maxIndex ) {
+      return minIndex;
     };
     return index;
   }
   const onChangeDate = ( howManuChange ) => {
-    let current = currentValue;
+    let current = currentValue.index;
     let changedIndex = current - howManuChange;
     applyChangeDate( changedIndex );
   };
@@ -45,7 +54,7 @@ const DatePickerElements = ( props ) => {
   const onDoubleClickHandler = ( event ) => {
     if ( event.target.tagName === 'LI' ) {
       if ( !props.doubleClickd ) {
-        const currentYear = currentYear( currentValue );
+        const currentYear = currentYear( currentValue.index );
         const lastNum = currentYear.value.toString().slice( -1 );
         let current;
         if ( lastNum >= 0 && lastNum <= 5 ) {
